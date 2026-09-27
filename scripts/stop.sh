@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+docker compose down
+echo "Lab stopped. Persistent container volumes, if any, were retained."

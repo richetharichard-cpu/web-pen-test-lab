@@ -1,0 +1,40 @@
+services:
+  kali:
+    image: kalilinux/kali-rolling
+    container_name: lab-kali
+    command: >
+      bash -lc "apt-get update &&
+      DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends
+      nmap gobuster sqlmap curl git ca-certificates &&
+      rm -rf /var/lib/apt/lists/* &&
+      sleep infinity"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    networks:
+      - practice-lab
+    depends_on:
+      - dvwa
+      - juice-shop
+
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: lab-dvwa
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks:
+      - practice-lab
+
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: lab-juice-shop
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - practice-lab
+
+networks:
+  practice-lab:
+    driver: bridge
